@@ -10,7 +10,6 @@ const rss_model_js_1 = __importDefault(require("../../../../models/rss.model"));
 // Placeholder for authentication and authorization logic if needed
 // Original Express route for active feeds did not specify auth, but you might want to add it.
 const checkAuth = async (req) => {
-    console.warn('Auth bypass: Placeholder for auth check in /api/feeds/active');
     return { authorized: true };
 };
 async function GET(req) {
@@ -43,7 +42,6 @@ async function GET(req) {
         });
     }
     catch (err) {
-        console.error('Error in GET /api/feeds/active:', err);
         return server_1.NextResponse.json({ message: 'Error fetching active feeds', error: err.message }, { status: 500 });
     }
 }
