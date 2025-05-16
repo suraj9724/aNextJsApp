@@ -654,4 +654,11 @@ const users = () => {
   );
 };
 
+export async function getServerSideProps() {
+  // This function makes the page dynamically rendered at request time.
+  return {
+    props: {},
+  };
+}
+
 export default users;

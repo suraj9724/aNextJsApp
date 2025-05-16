@@ -343,4 +343,13 @@ const dashboard = () => {
   );
 };
 
+export async function getServerSideProps() {
+  // This function makes the page dynamically rendered at request time.
+  // You can fetch initial data here if needed, or leave it empty
+  // if all data is fetched client-side after hydration.
+  return {
+    props: {},
+  };
+}
+
 export default dashboard;
