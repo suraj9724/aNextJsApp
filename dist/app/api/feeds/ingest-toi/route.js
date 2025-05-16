@@ -7,7 +7,7 @@ exports.GET = GET;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../lib/mongodb")); // Adjust path to your dbConnect
 const rss_model_js_1 = __importDefault(require("../../../../models/rss.model")); // Adjust path
-const news_model_js_1 = __importDefault(require("../../../../models/news.model.js")); // Adjust path
+const news_model_js_1 = __importDefault(require("../../../../models/news.model")); // Adjust path
 const rss_parser_1 = __importDefault(require("rss-parser"));
 const rssParser = new rss_parser_1.default({
     headers: {

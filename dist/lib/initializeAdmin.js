@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_js_1 = __importDefault(require("../models/user.model.js")); // Adjust path as necessary
+const user_model_js_1 = __importDefault(require("../models/user.model")); // Adjust path as necessary
 const initializeAdmin = async () => {
     try {
         const adminEmail = process.env.ADMIN_EMAIL;
@@ -29,7 +29,7 @@ const initializeAdmin = async () => {
         const newUser = new user_model_js_1.default({
             name: adminName,
             email: adminEmail,
-            password: adminPassword, // The pre-save hook in user.model.js will hash this
+            password: adminPassword, // The pre-save hook in user.model will hash this
             role: 'admin',
             // You might want to add emailVerified: true or similar if your model supports it
         });

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GET = GET;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../lib/mongodb"));
-const news_model_js_1 = __importDefault(require("../../../../models/news.model.js"));
+const news_model_js_1 = __importDefault(require("../../../../models/news.model"));
 async function GET(req) {
     await (0, mongodb_1.default)();
     try {

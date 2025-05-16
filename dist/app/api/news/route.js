@@ -7,9 +7,9 @@ exports.POST = POST;
 exports.GET = GET;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../lib/mongodb"));
-const news_model_js_1 = __importDefault(require("../../../models/news.model.js"));
+const news_model_js_1 = __importDefault(require("../../../models/news.model"));
 const rss_model_js_1 = __importDefault(require("../../../models/rss.model"));
-const comment_model_js_1 = __importDefault(require("../../../models/comment.model.js"));
+const comment_model_js_1 = __importDefault(require("../../../models/comment.model"));
 const news_validation_js_1 = require("../../../validations/news.validation.js");
 // import { getUserFromRequest, isAdmin } from '../../../lib/authUtils'; // Placeholder for your auth logic
 // Placeholder for req.user. This needs to be replaced with your actual auth logic in Next.js

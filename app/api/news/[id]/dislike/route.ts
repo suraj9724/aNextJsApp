@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../../lib/mongodb';
-import News from '../../../../../models/news.model.js';
+import News from '../../../../../models/news.model';
 import { idSchema } from '../../../../../validations/rss.validation.js'; // For param validation
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../auth/[...nextauth]/route';

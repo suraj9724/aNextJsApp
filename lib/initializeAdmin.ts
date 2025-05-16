@@ -31,7 +31,7 @@ const initializeAdmin = async () => {
         const newUser = new User({
             name: adminName,
             email: adminEmail,
-            password: adminPassword, // The pre-save hook in user.model.js will hash this
+            password: adminPassword, // The pre-save hook in user.model will hash this
             role: 'admin',
             // You might want to add emailVerified: true or similar if your model supports it
         });

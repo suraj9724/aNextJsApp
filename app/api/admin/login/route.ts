@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../lib/mongodb';
-import User from '../../../../models/user.model.js';
-import { loginSchema } from '../../../../validations/user.validation.js';
+import User from '../../../../models/user.model';
+import { loginSchema } from '../../../../validations/user.validation';
 import jwt, { SignOptions } from 'jsonwebtoken';
 
 /**

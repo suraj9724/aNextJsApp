@@ -7,7 +7,7 @@ exports.GET = GET;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../../lib/mongodb"));
 const rss_model_js_1 = __importDefault(require("../../../../../models/rss.model"));
-const news_model_js_1 = __importDefault(require("../../../../../models/news.model.js"));
+const news_model_js_1 = __importDefault(require("../../../../../models/news.model"));
 const rss_validation_js_1 = require("../../../../../validations/rss.validation.js");
 // Placeholder for authentication and authorization logic
 const checkAuth = async (req) => {

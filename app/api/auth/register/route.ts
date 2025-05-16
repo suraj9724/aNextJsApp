@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../lib/mongodb';
-import User from '../../../../models/user.model.js';
-import { registerSchema } from '../../../../validations/user.validation.js';
+import User from '../../../../models/user.model';
+import { registerSchema } from '../../../../validations/user.validation';
 import jwt, { SignOptions } from 'jsonwebtoken';
 
 export async function POST(req: NextRequest) {

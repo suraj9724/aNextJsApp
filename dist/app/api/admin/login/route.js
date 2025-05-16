@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.POST = POST;
 const server_1 = require("next/server");
-const user_model_js_1 = __importDefault(require("../../../../models/user.model.js"));
+const user_model_js_1 = __importDefault(require("../../../../models/user.model"));
 const user_validation_js_1 = require("../../../../validations/user.validation.js");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 /**
@@ -67,7 +67,7 @@ async function POST(req) {
             userId: adminUser._id, // Include user ID in token payload
             role: adminUser.role // Include role for authorization checks
         }, process.env.JWT_SECRET, // Secret key from environment variables
-        jwtOptions // Token expiration settings
+            jwtOptions // Token expiration settings
         );
         // STEP 8: Return successful login response
         return server_1.NextResponse.json({

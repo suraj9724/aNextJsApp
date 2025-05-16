@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
         const newUser = new User({
             name,
             email,
-            password, // Password will be hashed by the pre-save hook in user.model.js
+            password, // Password will be hashed by the pre-save hook in user.model
             role,
             avatar: avatar || undefined, // Store undefined if empty string to avoid saving empty avatar strings
         });

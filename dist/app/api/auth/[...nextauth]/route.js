@@ -7,7 +7,7 @@ exports.POST = exports.GET = exports.authOptions = void 0;
 const next_auth_1 = __importDefault(require("next-auth"));
 const credentials_1 = __importDefault(require("next-auth/providers/credentials"));
 const mongodb_1 = __importDefault(require("../../../../lib/mongodb")); // Adjust path as necessary
-const user_model_js_1 = __importDefault(require("../../../../models/user.model.js")); // Adjust path as necessary
+const user_model_js_1 = __importDefault(require("../../../../models/user.model")); // Adjust path as necessary
 const bcryptjs_1 = __importDefault(require("bcryptjs")); // Ensure bcryptjs is installed
 exports.authOptions = {
     providers: [

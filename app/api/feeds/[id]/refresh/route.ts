@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '../../../../../lib/mongodb';
 import RSSFeed from '../../../../../models/rss.model';
-import News from '../../../../../models/news.model.js';
+import News from '../../../../../models/news.model';
 import { idSchema } from '../../../../../validations/rss.validation.js';
 import Parser from 'rss-parser';
 

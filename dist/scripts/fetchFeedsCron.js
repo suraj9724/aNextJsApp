@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import Rss from '../models/rss.model';
-import News from '../models/news.model.js';
+import News from '../models/news.model';
 import { fetchLatest } from '../app/utils/rssParser.js';
 import { connectDB } from './utils/db.js';
 // Initialize database connection

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.POST = POST;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../../lib/mongodb"));
-const news_model_js_1 = __importDefault(require("../../../../../models/news.model.js"));
+const news_model_js_1 = __importDefault(require("../../../../../models/news.model"));
 const rss_validation_js_1 = require("../../../../../validations/rss.validation.js"); // For param validation
 const route_1 = require("../../../auth/[...nextauth]/route");
 const next_auth_1 = require("next-auth");

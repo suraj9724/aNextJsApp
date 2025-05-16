@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../lib/mongodb';
-import News from '../../../../models/news.model.js';
+import News from '../../../../models/news.model';
 import { idSchema } from '../../../../validations/rss.validation.js'; // Reusing idSchema for param validation
 import { newsSchema } from '../../../../validations/news.validation.js'; // For PUT body validation
 import RSSFeed from '../../../../models/rss.model';

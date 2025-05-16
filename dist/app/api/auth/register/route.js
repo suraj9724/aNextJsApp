@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.POST = POST;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../lib/mongodb"));
-const user_model_js_1 = __importDefault(require("../../../../models/user.model.js"));
+const user_model_js_1 = __importDefault(require("../../../../models/user.model"));
 const user_validation_js_1 = require("../../../../validations/user.validation.js");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 async function POST(req) {
