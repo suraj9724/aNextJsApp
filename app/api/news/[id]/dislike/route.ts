@@ -4,6 +4,7 @@ import News from '../../../../../models/news.model';
 import { idSchema } from '../../../../../validations/rss.validation.js'; // For param validation
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../auth/[...nextauth]/route';
+import mongoose from 'mongoose';
 
 // Placeholder for req.user. This needs to be replaced with your actual auth logic in Next.js
 const getUserIdFromRequest = async (req: NextRequest): Promise<{ userId: string | null; error?: NextResponse }> => {
@@ -34,8 +35,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
             return NextResponse.json({ message: 'News item not found' }, { status: 404 });
         }
 
-        const isLiked = newsItem.likedBy.includes(userId);
-        const isDisliked = newsItem.dislikedBy.includes(userId);
+        const isLiked = newsItem.likedBy.includes(new mongoose.Types.ObjectId(userId));
+        const isDisliked = newsItem.dislikedBy.includes(new mongoose.Types.ObjectId(userId));
 
         let updateQuery = {};
         if (isDisliked) { // Already disliked, so un-dislike
