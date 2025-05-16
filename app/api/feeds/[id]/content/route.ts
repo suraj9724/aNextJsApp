@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '../../../../../lib/mongodb';
 import RSSFeed from '../../../../../models/rss.model';
 import News from '../../../../../models/news.model';
-import { idSchema } from '../../../../../validations/rss.validation.js';
+import { idSchema } from '../../../../../validations/rss.validation';
 
 // Placeholder for authentication and authorization logic
 const checkAuth = async (req: Request): Promise<{ authorized: boolean; error?: NextResponse }> => {

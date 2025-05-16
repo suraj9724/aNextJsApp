@@ -15,6 +15,8 @@ export interface INews extends Document {
     likedBy: mongoose.Types.ObjectId[];
     dislikedBy: mongoose.Types.ObjectId[];
     comments: mongoose.Types.ObjectId[];
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 type NewsModelType = Model<INews, {}, { bulkUpsert: (items: Partial<INews>[]) => Promise<BulkWriteResult> }>;
