@@ -1,3 +1,10 @@
 {
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/admin/users/[id]/route": "app/api/admin/users/[id]/route.js",
+  "/api/admin/users/route": "app/api/admin/users/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/auth/register/route": "app/api/auth/register/route.js",
+  "/api/feeds/route": "app/api/feeds/route.js",
+  "/api/news/route": "app/api/news/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js"
 }

@@ -10,6 +10,10 @@ declare global {
 }
 
 const MONGODB_URI = process.env.MONGODB_URI;
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 5000; // 5 seconds
+const CONNECTION_TIMEOUT = 10000; // 10 seconds
+
 // console.log("[DB Connect] MONGODB_URI loaded:", MONGODB_URI ? MONGODB_URI.substring(0, 20) + '...' : 'NOT LOADED'); // Log a snippet
 
 if (!MONGODB_URI) {
@@ -30,7 +34,9 @@ if (!cached) {
     cached = global.mongoose = { conn: null, promise: null };
 }
 
-async function dbConnect() {
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+async function dbConnect(retryCount = 0): Promise<Mongoose> {
     // console.log("[DB Connect] dbConnect function called.");
     if (cached.conn) {
         // console.log("[DB Connect] Using cached MongoDB connection.");
@@ -41,6 +47,9 @@ async function dbConnect() {
         // console.log("[DB Connect] No cached promise. Attempting new MongoDB connection...");
         const opts = {
             bufferCommands: false,
+            serverSelectionTimeoutMS: CONNECTION_TIMEOUT,
+            socketTimeoutMS: CONNECTION_TIMEOUT,
+            connectTimeoutMS: CONNECTION_TIMEOUT,
         };
 
         cached.promise = mongoose.connect(MONGODB_URI!, opts)
@@ -49,12 +58,18 @@ async function dbConnect() {
                 initializeAdmin(); // Call admin initialization after successful connection
                 return mongooseInstance;
             })
-            .catch(err => {
-                // console.error("[DB Connect] MongoDB connection error:", err.message);
-                // console.error("[DB Connect] Full error object:", err);
-                // Set promise to null so a new connection attempt can be made next time
+            .catch(async (err) => {
+                console.error('MongoDB connection error:', err.message);
+
+                if (retryCount < MAX_RETRIES) {
+                    console.log(`Retrying connection (${retryCount + 1}/${MAX_RETRIES})...`);
+                    cached.promise = null;
+                    await sleep(RETRY_DELAY);
+                    return dbConnect(retryCount + 1);
+                }
+
                 cached.promise = null;
-                throw err; // Re-throw the error to indicate failure
+                throw new Error(`Failed to connect to MongoDB after ${MAX_RETRIES} attempts: ${err.message}`);
             });
     }
     try {
@@ -65,6 +80,21 @@ async function dbConnect() {
         cached.conn = null;
         throw e; // Re-throw to calling function
     }
+
+    // Add connection monitoring
+    mongoose.connection.on('error', (err) => {
+        console.error('MongoDB connection error:', err);
+        cached.conn = null;
+        cached.promise = null;
+    });
+
+    mongoose.connection.on('disconnected', () => {
+        console.warn('MongoDB disconnected. Attempting to reconnect...');
+        cached.conn = null;
+        cached.promise = null;
+        dbConnect();
+    });
+
     return cached.conn;
 }
 

@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../../lib/mongodb';
 import News from '../../../../../models/news.model';
 import Comment from '../../../../../models/comment.model';
-import { idSchema } from '../../../../../validations/rss.validation.js'; // For newsId param validation
+import { idSchema } from '../../../../../validations/rss.validation'; // For newsId param validation
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../auth/[...nextauth]/route';
 

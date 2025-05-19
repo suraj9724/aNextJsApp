@@ -9,7 +9,7 @@ exports.DELETE = DELETE;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../lib/mongodb")); // Adjusted path
 const rss_model_js_1 = __importDefault(require("../../../../models/rss.model")); // Adjusted path
-const rss_validation_js_1 = require("../../../../validations/rss.validation.js"); // Adjusted path
+const rss_validation_js_1 = require("../../../../validations/rss.validation"); // Adjusted path
 // Placeholder for authentication and authorization logic
 // In your Express app, these routes were protected by `auth` and `requireAdmin` middleware.
 // You'll need to implement similar checks here based on your Next.js auth solution.

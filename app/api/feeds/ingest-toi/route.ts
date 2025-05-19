@@ -44,6 +44,23 @@ function extractFeedUrls(html: string): { rssLink: string; subtype: string }[] {
     return feeds;
 }
 
+// Add date parsing helper function
+const parseDate = (dateStr: string): Date => {
+    try {
+        // Try parsing the date string
+        const date = new Date(dateStr);
+        // Check if the date is valid
+        if (isNaN(date.getTime())) {
+            // If invalid, return current date as fallback
+            return new Date();
+        }
+        return date;
+    } catch (error) {
+        // If any error occurs, return current date as fallback
+        return new Date();
+    }
+};
+
 export async function GET(req: NextRequest) {
     // console.log("[ingest-toi] GET /api/admin/ingest-toi REQUEST RECEIVED");
     // const session = await getServerSession(authOptions);
@@ -125,9 +142,9 @@ export async function GET(req: NextRequest) {
 
                     const newsData = {
                         title: title,
-                        content: cleanContent(item.contentSnippet || item.content),
+                        description: item.contentSnippet || item.content,
                         url: url,
-                        publishedAt: publishedAt,
+                        publishedAt: parseDate(item.pubDate || new Date().toISOString()),
                         author: item.creator || item.author || 'Times of India', // Prefer item.creator, then item.author
                         source: rssFeed._id, // Link to the RSSFeed document
                         subtype: feedInfo.subtype || "general", // Inherit subtype from parent feed

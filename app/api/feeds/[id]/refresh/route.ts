@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import dbConnect from '../../../../../lib/mongodb';
 import RSSFeed from '../../../../../models/rss.model';
 import News from '../../../../../models/news.model';
-import { idSchema } from '../../../../../validations/rss.validation.js';
+import { idSchema } from '../../../../../validations/rss.validation';
 import Parser from 'rss-parser';
 
 // Placeholder for authentication and authorization logic

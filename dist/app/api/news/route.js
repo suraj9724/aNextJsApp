@@ -10,7 +10,7 @@ const mongodb_1 = __importDefault(require("../../../lib/mongodb"));
 const news_model_js_1 = __importDefault(require("../../../models/news.model"));
 const rss_model_js_1 = __importDefault(require("../../../models/rss.model"));
 const comment_model_js_1 = __importDefault(require("../../../models/comment.model"));
-const news_validation_js_1 = require("../../../validations/news.validation.js");
+const news_validation_js_1 = require("../../../validations/news.validation");
 // import { getUserFromRequest, isAdmin } from '../../../lib/authUtils'; // Placeholder for your auth logic
 // Placeholder for req.user. This needs to be replaced with your actual auth logic in Next.js
 const getUserIdAndRoleFromRequest = async (req) => {

@@ -9,8 +9,8 @@ exports.DELETE = DELETE;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../lib/mongodb"));
 const news_model_js_1 = __importDefault(require("../../../../models/news.model"));
-const rss_validation_js_1 = require("../../../../validations/rss.validation.js"); // Reusing idSchema for param validation
-const news_validation_js_1 = require("../../../../validations/news.validation.js"); // For PUT body validation
+const rss_validation_js_1 = require("../../../../validations/rss.validation"); // Reusing idSchema for param validation
+const news_validation_js_1 = require("../../../../validations/news.validation"); // For PUT body validation
 const rss_model_1 = __importDefault(require("../../../../models/rss.model"));
 // import { getUserIdAndRoleFromRequest } from '../../../../lib/authUtils'; // Placeholder for your auth logic
 // Placeholder for req.user. This needs to be replaced with your actual auth logic in Next.js

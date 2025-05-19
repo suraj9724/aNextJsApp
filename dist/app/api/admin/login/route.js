@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.POST = POST;
 const server_1 = require("next/server");
 const user_model_js_1 = __importDefault(require("../../../../models/user.model"));
-const user_validation_js_1 = require("../../../../validations/user.validation.js");
+const user_validation_js_1 = require("../../../../validations/user.validation");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 /**
  * POST handler for admin login

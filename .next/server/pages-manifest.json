@@ -1,6 +1,10 @@
 {
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/rssfeed": "pages/rssfeed.js"
+  "/dashboard": "pages/dashboard.js",
+  "/login": "pages/login.js",
+  "/news": "pages/news.js",
+  "/rssfeed": "pages/rssfeed.js",
+  "/signup": "pages/signup.js",
+  "/users": "pages/users.js"
 }

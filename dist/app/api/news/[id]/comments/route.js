@@ -9,7 +9,7 @@ const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../../lib/mongodb"));
 const news_model_js_1 = __importDefault(require("../../../../../models/news.model"));
 const comment_model_js_1 = __importDefault(require("../../../../../models/comment.model"));
-const rss_validation_js_1 = require("../../../../../validations/rss.validation.js"); // For newsId param validation
+const rss_validation_js_1 = require("../../../../../validations/rss.validation"); // For newsId param validation
 const next_auth_1 = require("next-auth");
 const route_1 = require("../../../auth/[...nextauth]/route");
 // Placeholder for req.user. This needs to be replaced with your actual auth logic in Next.js

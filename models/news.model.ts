@@ -101,7 +101,12 @@ const newsSchema = new Schema<INews, NewsModelType>({
 });
 
 // Indexes for better query performance
-newsSchema.index({ title: 'text', description: 'text', content: 'text' });
+newsSchema.index({
+    title: 'text',
+    content: 'text',
+    contentSnippet: 'text',
+    subtype: 'text',
+});
 newsSchema.index({ subtype: 1 });
 
 const News = (mongoose.models.Newsfeeds || mongoose.model<INews, NewsModelType>('Newsfeeds', newsSchema)) as NewsModelType;

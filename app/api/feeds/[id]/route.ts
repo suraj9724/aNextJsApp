@@ -4,7 +4,7 @@ import RSSFeed from '../../../../models/rss.model'; // Adjusted path
 import {
     idSchema,
     updateRssFeedSchema
-} from '../../../../validations/rss.validation.js'; // Adjusted path
+} from '../../../../validations/rss.validation'; // Adjusted path
 
 // Placeholder for authentication and authorization logic
 // In your Express app, these routes were protected by `auth` and `requireAdmin` middleware.

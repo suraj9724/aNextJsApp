@@ -1,10 +1,10 @@
 import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../lib/mongodb';
 import News from '../../../../models/news.model';
-import { idSchema } from '../../../../validations/rss.validation.js'; // Reusing idSchema for param validation
-import { newsSchema } from '../../../../validations/news.validation.js'; // For PUT body validation
+import { idSchema } from '../../../../validations/rss.validation'; // Reusing idSchema for param validation
+import { newsSchema } from '../../../../validations/news.validation'; // For PUT body validation
 import RSSFeed from '../../../../models/rss.model';
-// import { getUserIdAndRoleFromRequest } from '../../../../lib/authUtils'; // Placeholder for your auth logic
+// import { getUserIdAndRoleFromRequest } from '../../../../lib/authUtils'; // Placeholder for your auth logic      
 
 // Placeholder for req.user. This needs to be replaced with your actual auth logic in Next.js
 const getUserIdAndRoleFromRequest = async (req: NextRequest): Promise<{ userId: string | null; userName: string | null; isAdminUser: boolean; error?: NextResponse }> => {
@@ -17,6 +17,8 @@ const getUserIdAndRoleFromRequest = async (req: NextRequest): Promise<{ userId: 
         isAdminUser: isWriteOperation ? true : false // Simulate admin for write ops for testing
     };
 };
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
     await dbConnect();

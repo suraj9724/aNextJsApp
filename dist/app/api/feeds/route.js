@@ -8,7 +8,7 @@ exports.GET = GET;
 const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../lib/mongodb")); // Adjusted path
 const rss_model_js_1 = __importDefault(require("../../../models/rss.model")); // Adjusted path, .js extension
-const rss_validation_js_1 = require("../../../validations/rss.validation.js"); // Adjusted path, .js extension
+const rss_validation_js_1 = require("../../../validations/rss.validation"); // Adjusted path, .js extension
 const next_1 = require("next-auth/next"); // Import for session
 const route_1 = require("../auth/[...nextauth]/route"); // Import your authOptions
 // import Parser from 'rss-parser'; // We'll use this later for feed parsing logic
