@@ -15,6 +15,7 @@ import {
   DialogClose,
 } from "../components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Skeleton } from "../components/ui/skeleton";
 
 interface NewsItem {
   _id: string;
@@ -393,6 +394,31 @@ const news = () => {
     setIsDialogOpen(true);
   };
 
+  const renderSkeletons = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <Card key={i} className="h-[350px]">
+          <CardHeader>
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-4 w-1/2 mt-2" />
+          </CardHeader>
+          <CardContent>
+            <Skeleton className="h-4 w-full mt-2" />
+            <Skeleton className="h-4 w-5/6 mt-2" />
+            <Skeleton className="h-4 w-4/6 mt-2" />
+            <div className="flex gap-2 mt-4">
+              <Skeleton className="h-6 w-16 rounded-full" />
+              <Skeleton className="h-6 w-16 rounded-full" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Skeleton className="h-10 w-24" />
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  );
+
   const closeCommentsDialog = () => {
     setSelectedNews(null);
     setIsDialogOpen(false);
@@ -404,16 +430,49 @@ const news = () => {
 
       <main className="md:pl-64 pt-16">
         <div className="container mx-auto px-4 py-8">
-          {/* Debugging: Show singleNewsItem state */}
-          {/* {singleNewsItem !== null ? <p>Viewing Single Item</p> : <p>Viewing List</p>} */}
-          {/* End Debugging */}
-          {isLoading ? (
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="py-12 text-center">
-                <p className="text-muted-foreground">Loading news...</p>
+          <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <div>
+                  <h1 className="text-2xl font-bold">News</h1>
+                  <p className="text-muted-foreground">
+                    Browse the latest articles.
+                  </p>
+                </div>
+                {/* Subtype Filter Dropdown */}
+                <div className="w-full md:w-auto md:min-w-[200px]">
+                  <Select
+                    value={selectedSubtype}
+                    onValueChange={(value) => {
+                      setSelectedSubtype(value);
+                      // Optionally, clear URL subtype query if user interacts with dropdown
+                      // router.push('/news', undefined, { shallow: true });
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Filter by Subtype" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {availableSubtypes.map(subtype => (
+                        <SelectItem key={subtype} value={subtype}>
+                          {subtype === "all" || subtype === "" ? "All Subtypes" : subtype}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            </div>
-          ) : singleNewsItem ? (
+              <div className="bg-white rounded-lg shadow p-6 mb-6">
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Search news..."
+                    className="pl-8"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
+          {isLoading ? renderSkeletons() : singleNewsItem ? (
             // Render single news item view
             <div className="bg-white rounded-lg shadow p-6">
               <Button variant="outline" onClick={() => router.push('/news')} className="mb-4">Back to News</Button>
@@ -487,48 +546,6 @@ const news = () => {
           ) : (
             // Render news list view
             <>
-              <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                <div>
-                  <h1 className="text-2xl font-bold">News</h1>
-                  <p className="text-muted-foreground">
-                    Browse the latest articles.
-                  </p>
-                </div>
-                {/* Subtype Filter Dropdown */}
-                <div className="w-full md:w-auto md:min-w-[200px]">
-                  <Select
-                    value={selectedSubtype}
-                    onValueChange={(value) => {
-                      setSelectedSubtype(value);
-                      // Optionally, clear URL subtype query if user interacts with dropdown
-                      // router.push('/news', undefined, { shallow: true });
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Filter by Subtype" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {availableSubtypes.map(subtype => (
-                        <SelectItem key={subtype} value={subtype}>
-                          {subtype === "all" || subtype === "" ? "All Subtypes" : subtype}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="bg-white rounded-lg shadow p-6 mb-6">
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Search news..."
-                    className="pl-8"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredNews.map((item) => (
                   <Card key={item._id} className="relative overflow-hidden hover:shadow-lg transition-shadow duration-200">

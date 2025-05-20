@@ -28,25 +28,21 @@ const LoginPage = () => {
   const authContext = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log("handleSubmit triggered");
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
 
     try {
-      console.log("Attempting signIn with:", { email, password });
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
-      console.log("signIn result:", result);
 
       if (result?.error) {
         setError(result.error === "CredentialsSignin" ? "Invalid email or password." : result.error);
       } else if (result?.ok) {
         const session = await getSession();
-        console.log("NextAuth session after login:", session);
         if (session?.user) {
           const userForAuthContext = {
             id: (session.user as any).id,
@@ -54,7 +50,6 @@ const LoginPage = () => {
             email: session.user.email || "",
             role: (session.user as any).role || "user",
           };
-          console.log("[login.tsx] Calling authContext.login with user:", userForAuthContext);
           authContext.login(userForAuthContext, (session.user as any).id || "next-auth-session");
         }
         router.push("/dashboard");
@@ -62,7 +57,6 @@ const LoginPage = () => {
         setError("An unknown error occurred during login.");
       }
     } catch (err: any) {
-      console.error("Login submission error:", err);
       setError(err.message || "An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
@@ -74,18 +68,34 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8">
       <div className="w-full max-w-md">
-        <Tabs defaultValue="admin" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-2 w-full mb-6">
-            <TabsTrigger value="user">User Login</TabsTrigger>
-            <TabsTrigger value="admin">Admin Login</TabsTrigger>
+        <Tabs defaultValue="user" value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid grid-cols-2 w-full mb-6 bg-gray-100 rounded-lg p-1">
+            <TabsTrigger
+              value="user"
+              className={`rounded-lg transition ${
+                activeTab === "user" ? "bg-white shadow text-black" : "text-gray-500"
+              }`}
+            >
+              User Login
+            </TabsTrigger>
+            <TabsTrigger
+              value="admin"
+              className={`rounded-lg transition ${
+                activeTab === "admin" ? "bg-white shadow text-black" : "text-gray-500"
+              }`}
+            >
+              Admin Login
+            </TabsTrigger>
           </TabsList>
 
-          <Card>
+          <Card className="shadow-xl border border-gray-200 rounded-xl">
             <CardHeader>
-              <CardTitle>{activeTab === "admin" ? "Admin Login" : "Login"}</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-2xl font-semibold">
+                {activeTab === "admin" ? "Admin Login" : "Login"}
+              </CardTitle>
+              <CardDescription className="text-gray-500 mt-1">
                 {activeTab === "admin"
                   ? "Enter your admin credentials to access the dashboard."
                   : "Enter your credentials to access your account."}
@@ -93,9 +103,11 @@ const LoginPage = () => {
             </CardHeader>
 
             <form onSubmit={handleSubmit}>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -104,11 +116,14 @@ const LoginPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isSubmitting}
+                    className="rounded-md focus-visible:ring-2 focus-visible:ring-offset-1"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                    Password
+                  </Label>
                   <div className="relative">
                     <Input
                       id="password"
@@ -118,12 +133,14 @@ const LoginPage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={isSubmitting}
+                      className="pr-10 rounded-md focus-visible:ring-2 focus-visible:ring-offset-1"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
+                      aria-label="Toggle password visibility"
+                      className="absolute right-1 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                       onClick={toggleShowPassword}
                       disabled={isSubmitting}
                     >
@@ -133,21 +150,23 @@ const LoginPage = () => {
                 </div>
 
                 {error && (
-                  <div className="text-red-600 text-sm font-medium">
-                    {error}
-                  </div>
+                  <p className="text-sm text-red-600 font-medium mt-2">{error}</p>
                 )}
               </CardContent>
 
-              <CardFooter className="flex flex-col items-stretch">
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? "Signing in..." : (activeTab === "admin" ? "Admin Sign In" : "Sign In")}
+              <CardFooter className="flex flex-col items-stretch gap-4">
+                <Button type="submit" className="w-full rounded-lg text-sm" disabled={isSubmitting}>
+                  {isSubmitting
+                    ? "Signing in..."
+                    : activeTab === "admin"
+                    ? "Admin Sign In"
+                    : "Sign In"}
                 </Button>
 
                 {activeTab === "user" && (
-                  <div className="mt-4 text-center text-sm">
+                  <div className="text-center text-sm text-muted-foreground">
                     Don't have an account?{" "}
-                    <Link href="/signup" className="text-blue underline">
+                    <Link href="/signup" className="text-blue-600 hover:underline">
                       Sign up
                     </Link>
                   </div>

@@ -1,5 +1,14 @@
 {
   "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js",
-  "/news": "pages/news.js"
+  "/_error": "pages/_error.js",
+  "/login": "pages/login.html",
+  "/news": "pages/news.html",
+  "/signup": "pages/signup.html",
+  "/404": "pages/404.html",
+  "/rssfeed": "pages/rssfeed.html",
+  "/": "pages/index.html",
+  "/unauthorized": "pages/unauthorized.html",
+  "/users": "pages/users.js",
+  "/dashboard": "pages/dashboard.js",
+  "/_document": "pages/_document.js"
 }

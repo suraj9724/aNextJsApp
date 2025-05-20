@@ -58,29 +58,24 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../contexts/AuthContext";
-import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+import { Skeleton } from '../components/ui/skeleton';
 
 // Define the User type
 type User = {
   id: string;
   name: string;
   email: string;
-  role: string;
+  role: "admin" | "user";
   avatar?: string;
-};
-
-// Define the NewUser type for user creation
-type NewUser = Omit<User, 'id'> & {
-  password: string;
 };
 
 // Form schema for validations
 const userFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters" }).optional(),
   role: z.enum(["admin", "user"]),
-  avatar: z.string().optional()
+  avatar: z.string()
 });
 
 type UserFormData = z.infer<typeof userFormSchema>;
@@ -94,7 +89,7 @@ const users = () => {
   const [dialogMode, setDialogMode] = useState<DialogMode>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [addError, setAddError] = useState<string>('');
+  const [error, setError] = useState<string>('');
   const [sortConfig, setSortConfig] = useState<{
     key: keyof User | null;
     direction: 'ascending' | 'descending';
@@ -121,6 +116,7 @@ const users = () => {
   // Fetch users from API
   const fetchUsers = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch('/api/admin/users', {
         method: 'GET'
       });
@@ -227,7 +223,7 @@ const users = () => {
 
   const handleAddUser = async (data: UserFormData) => {
     setIsSubmitting(true);
-    setAddError('');
+    setError('');
 
     try {
       // Admin is always creating the user via this interface, 
@@ -275,7 +271,7 @@ const users = () => {
         description: `User ${data.name} created successfully as ${data.role}`,
       });
     } catch (error: any) {
-      setAddError(error.message || 'Failed to create user');
+      setError(error.message || 'Failed to create user');
       toast({
         title: "Error",
         description: error.message || "Failed to create user",
@@ -390,20 +386,20 @@ const users = () => {
       <main className="md:pl-64 pt-16">
         <div className="container mx-auto px-4 py-8">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold">Users Management</h1>
-            <p className="text-muted-foreground">
-              View and manage user accounts
+            <h1 className="text-2xl font-bold text-gray-900">Users Management</h1>
+            <p className="text-gray-600">
+              Manage all user accounts and permissions
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="p-4 border-b">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="relative">
+          <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1 relative">
+                {/* <div className="relative w-full md:w-auto"> */}
                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     type="search"
                     placeholder="Search users..."
-                    className="pl-8 w-full md:w-[300px]"
+                    className="pl-8"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
@@ -413,14 +409,14 @@ const users = () => {
                   Add New User
                 </Button>
               </div>
-            </div>
+            {/* </div> */}
 
             <div className="overflow-x-auto">
               <Table>
-                <TableHeader>
+                <TableHeader className="bg-gray-50">
                   <TableRow>
                     <TableHead
-                      className="w-[250px] cursor-pointer"
+                      className="w-[250px] cursor-pointer hover:bg-gray-100"
                       onClick={() => requestSort('name')}
                     >
                       Name {sortConfig.key === 'name' ? (
@@ -428,7 +424,7 @@ const users = () => {
                       ) : null}
                     </TableHead>
                     <TableHead
-                      className="cursor-pointer"
+                      className="cursor-pointer hover:bg-gray-100"
                       onClick={() => requestSort('email')}
                     >
                       Email {sortConfig.key === 'email' ? (
@@ -436,7 +432,7 @@ const users = () => {
                       ) : null}
                     </TableHead>
                     <TableHead
-                      className="cursor-pointer"
+                      className="cursor-pointer hover:bg-gray-100"
                       onClick={() => requestSort('role')}
                     >
                       Role {sortConfig.key === 'role' ? (
@@ -451,7 +447,8 @@ const users = () => {
                     <TableRow>
                       <TableCell colSpan={8} className="h-24 text-center">
                         <div className="flex justify-center items-center">
-                          Loading users...
+                          <Skeleton className="h-6 w-1/2 mb-2" />
+                          <Skeleton className="h-6 w-1/3" />
                         </div>
                       </TableCell>
                     </TableRow>
@@ -470,24 +467,26 @@ const users = () => {
                               {user.avatar ? (
                                 <AvatarImage src={user.avatar} alt={user.name} />
                               ) : (
-                                <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                                <AvatarFallback className="bg-gray-200 text-gray-700">
+                                  {getInitials(user.name)}
+                                </AvatarFallback>
                               )}
                             </Avatar>
-                            {user.name}
+                            <span className="font-medium">{user.name}</span>
                           </div>
                         </TableCell>
-                        <TableCell>{user.email}</TableCell>
+                        <TableCell className="text-gray-600">{user.email}</TableCell>
                         <TableCell>
                           <Badge variant={user.role === "admin" ? "default" : "outline"}>
                             {user.role}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right space-x-1">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => openEditDialog(user)}
-                            className="mr-1"
+                            className="text-gray-600 hover:text-blue-600"
                             aria-label="Edit user"
                           >
                             <Edit className="h-4 w-4" />
@@ -496,7 +495,7 @@ const users = () => {
                             variant="ghost"
                             size="sm"
                             onClick={() => openDeleteDialog(user)}
-                            className="text-destructive"
+                            className="text-destructive "
                             aria-label="Delete user"
                           >
                             <Trash2 className="h-4 w-4" />

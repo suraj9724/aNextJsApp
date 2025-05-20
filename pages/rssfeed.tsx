@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import AppSidebar from "../components/AppSidebar";
 import { Button } from "../components/ui/button";
-import { Card, CardContent } from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardFooter } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
 import { Pencil, Trash2, ExternalLink, Search, Rss, Edit } from "lucide-react";
@@ -27,6 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../components/ui/alert-dialog";
+import { Skeleton } from "../components/ui/skeleton";
 
 type RSSFeed = {
   _id: string;
@@ -261,6 +262,30 @@ const rssFeed = () => {
     }
   };
 
+  const renderSkeletons = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <Card key={i} className="h-[350px]">
+          <CardHeader>
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-4 w-1/2 mt-2" />
+          </CardHeader>
+          <CardContent>
+            <Skeleton className="h-4 w-full mt-2" />
+            <Skeleton className="h-4 w-5/6 mt-2" />
+            <Skeleton className="h-4 w-4/6 mt-2" />
+            <div className="flex gap-2 mt-4">
+              <Skeleton className="h-6 w-16 rounded-full" />
+              <Skeleton className="h-6 w-16 rounded-full" />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Skeleton className="h-10 w-24" />
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  );
   // Handlers for delete alert
   const openDeleteAlert = (feed: RSSFeed) => {
     setSelectedFeed(feed);
@@ -333,13 +358,7 @@ const rssFeed = () => {
             </div>
           </div>
 
-          {isLoading ? (
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="py-12 text-center">
-                <p className="text-muted-foreground">Loading feeds...</p>
-              </div>
-            </div>
-          ) : feeds.length === 0 ? (
+            {isLoading ? renderSkeletons() : feeds.length === 0 ? (
             <div className="bg-white rounded-lg shadow p-6">
               <div className="py-12 text-center">
                 <h2 className="text-xl font-medium text-muted-foreground">
