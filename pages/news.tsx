@@ -59,7 +59,7 @@ const news = () => {
 
   const fetchNews = async (page: number, subtype?: string, currentSearchTerm?: string) => {
     setIsLoading(true);
-    console.log("Fetching news list with params:", { page, subtype, currentSearchTerm });
+    // console.log("Fetching news list with params:", { page, subtype, currentSearchTerm });
     try {
       const params = new URLSearchParams();
       params.append("page", page.toString());
