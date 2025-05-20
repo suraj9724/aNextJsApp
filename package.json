@@ -55,6 +55,7 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.462.0",
+    "mongodb": "3.7",
     "mongoose": "^8.14.2",
     "next": "^15.3.2",
     "next-auth": "^4.24.11",
