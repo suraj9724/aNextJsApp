@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext" 
-import { useToast } from "../hooks/use-toast" 
-import { Button } from "../components/ui/button" 
-import { Input } from "../components/ui/input" 
+import { useAuth } from "../contexts/AuthContext"
+import { useToast } from "../hooks/use-toast"
+import { Button } from "../components/ui/button"
+import { Input } from "../components/ui/input"
 
 interface Comment {
   _id: string;
@@ -26,7 +26,7 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/news/${newsId}/comments`);
+      const response = await fetch(`/api/news/${newsId}/comments`);
       if (!response.ok) throw new Error("Failed to fetch comments");
       const data = await response.json();
       setComments(data);
@@ -54,7 +54,7 @@ const Comments: React.FC<CommentsProps> = ({ newsId }) => {
     }
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/api/news/${newsId}/comments`, {
+      const response = await fetch(`/api/news/${newsId}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

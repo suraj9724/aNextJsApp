@@ -3,6 +3,7 @@
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
   "/api/feeds/ingest-toi/route": "app/api/feeds/ingest-toi/route.js",
   "/api/feeds/route": "app/api/feeds/route.js",
+  "/api/news/[id]/comments/route": "app/api/news/[id]/comments/route.js",
   "/api/news/[id]/route": "app/api/news/[id]/route.js",
   "/api/news/route": "app/api/news/route.js",
   "/favicon.ico/route": "app/favicon.ico/route.js"
