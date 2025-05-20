@@ -74,7 +74,7 @@ const news = () => {
         params.append("subtype", subtypeToUse);
       }
 
-      const response = await fetch(`http://localhost:3000/api/news?${params.toString()}`, {
+      const response = await fetch(`/api/news?${params.toString()}`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -119,7 +119,7 @@ const news = () => {
   const fetchSingleNews = async (id: string) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/api/news/${id}`, {
+      const response = await fetch(`/api/news/${id}`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -334,7 +334,7 @@ const news = () => {
     setDislikedNewsIds(newDislikedIdsOptimistic);
 
     try {
-      const response = await fetch(`http://localhost:3000/api/news/${id}/reaction`, {
+      const response = await fetch(`/api/news/${id}/reaction`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${auth.token}`,
