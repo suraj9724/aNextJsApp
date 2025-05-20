@@ -3,7 +3,7 @@ import dbConnect from '../../../lib/mongodb'; // Adjusted path
 import RSSFeed from '../../../models/rss.model'; // Adjusted path, .js extension
 import { createRssFeedSchema } from '../../../validations/rss.validation'; // Adjusted path, .js extension
 import { getServerSession } from "next-auth/next"; // Import for session
-import { authOptions } from "../auth/[...nextauth]/route"; // Import your authOptions
+import { authOptions } from "../auth/auth.config"; // Import your authOptions
 // import Parser from 'rss-parser'; // We'll use this later for feed parsing logic
 
 // Placeholder for req.user. This needs to be replaced with your actual auth logic in Next.js

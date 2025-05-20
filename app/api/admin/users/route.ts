@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../lib/mongodb';
 import User from '../../../../models/user.model'; // Assuming your user model is here
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../auth/[...nextauth]/route"; // Adjust path as necessary
+import { authOptions } from "../../auth/auth.config"; // Adjust path as necessary
 
 export async function GET(req: NextRequest) {
     await dbConnect();

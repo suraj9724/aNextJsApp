@@ -1,10 +1,24 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
+  "/api/admin/create/route": "app/api/admin/create/route.js",
+  "/api/admin/login/route": "app/api/admin/login/route.js",
   "/api/admin/users/[id]/route": "app/api/admin/users/[id]/route.js",
+  "/api/admin/users/create/route": "app/api/admin/users/create/route.js",
   "/api/admin/users/route": "app/api/admin/users/route.js",
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/feeds/[id]/content/route": "app/api/feeds/[id]/content/route.js",
+  "/api/feeds/[id]/route": "app/api/feeds/[id]/route.js",
   "/api/auth/register/route": "app/api/auth/register/route.js",
+  "/api/cron/init/route": "app/api/cron/init/route.js",
+  "/api/feeds/[id]/refresh/route": "app/api/feeds/[id]/refresh/route.js",
+  "/api/feeds/inactive/route": "app/api/feeds/inactive/route.js",
+  "/api/feeds/active/route": "app/api/feeds/active/route.js",
+  "/api/feeds/ingest-toi/route": "app/api/feeds/ingest-toi/route.js",
   "/api/feeds/route": "app/api/feeds/route.js",
+  "/api/news/[id]/reaction/route": "app/api/news/[id]/reaction/route.js",
+  "/api/news/[id]/comments/route": "app/api/news/[id]/comments/route.js",
+  "/api/news/subtypes/route": "app/api/news/subtypes/route.js",
   "/api/news/route": "app/api/news/route.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/news/[id]/route": "app/api/news/[id]/route.js"
 }

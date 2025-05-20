@@ -8,7 +8,7 @@ const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../../lib/mongodb"));
 const user_model_1 = __importDefault(require("../../../../../models/user.model"));
 const next_1 = require("next-auth/next");
-const route_1 = require("../../../auth/[...nextauth]/route"); // Adjust path as per your authOptions location
+const route_1 = require("../../../auth/auth.config"); // Adjust path as per your authOptions location
 const zod_1 = require("zod");
 // Schema for validating the request body for creating a user
 const createUserSchema = zod_1.z.object({

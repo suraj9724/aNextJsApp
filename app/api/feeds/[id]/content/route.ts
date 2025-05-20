@@ -1,25 +1,31 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '../../../../../lib/mongodb';
 import RSSFeed from '../../../../../models/rss.model';
 import News from '../../../../../models/news.model';
 import { idSchema } from '../../../../../validations/rss.validation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../auth/auth.config';
 
 // Placeholder for authentication and authorization logic
 const checkAuth = async (req: Request): Promise<{ authorized: boolean; error?: NextResponse }> => {
-    // console.warn('Auth bypass: Placeholder for auth check in /api/feeds/[id]/content');
-    // This route in original Express app had `auth` and `requireAdmin`.
-    // Implement your full auth/admin check here.
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return { authorized: false, error: NextResponse.json({ message: 'Unauthorized' }, { status: 401 }) };
+    }
     return { authorized: true };
 };
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> } // Treat params as a Promise
+) {
     await dbConnect();
 
-    // const authResult = await checkAuth(req);
-    // if (!authResult.authorized) return authResult.error!;
+    const authResult = await checkAuth(req);
+    if (!authResult.authorized) return authResult.error!;
 
     try {
-        const { error: idValidationError } = idSchema.validate(params.id);
+        const { error: idValidationError } = idSchema.validate((await params).id);
         if (idValidationError) {
             return NextResponse.json({
                 message: 'Validation Error for ID',
@@ -27,13 +33,13 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
             }, { status: 400 });
         }
 
-        const rssFeed = await RSSFeed.findById(params.id);
+        const rssFeed = await RSSFeed.findById((await params).id);
         if (!rssFeed) {
             return NextResponse.json({ message: 'RSS feed not found' }, { status: 404 });
         }
 
         // --- BEGIN IMPLEMENTED LOGIC for getFeedContent ---
-        const { searchParams } = new URL(req.url);
+        const { searchParams } = req.nextUrl;
         const page = parseInt(searchParams.get('page') || '1');
         const limit = parseInt(searchParams.get('limit') || '10');
         const skip = (page - 1) * limit;

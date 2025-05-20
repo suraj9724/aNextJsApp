@@ -20,16 +20,16 @@ const getUserIdAndRoleFromRequest = async (req: NextRequest): Promise<{ userId: 
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     await dbConnect();
 
     try {
-        const { error: idValidationError } = idSchema.validate(params.id);
+        const { error: idValidationError } = idSchema.validate((await params).id);
         if (idValidationError) {
             return NextResponse.json({ message: 'Validation Error for ID', errors: [idValidationError.details[0].message] }, { status: 400 });
         }
 
-        const newsItem = await News.findById(params.id)
+        const newsItem = await News.findById((await params).id)
             .populate('source', 'Provider subtype')
             .populate('likedBy', 'name')
             .populate('dislikedBy', 'name');
@@ -40,13 +40,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         return NextResponse.json(newsItem);
 
     } catch (err: any) {
-        console.error(`Error fetching news item ${params.id}:`, err);
+        console.error(`Error fetching news item ${(await params).id}:`, err);
         if (err.name === 'CastError') return NextResponse.json({ message: 'Invalid news ID format' }, { status: 400 });
         return NextResponse.json({ message: 'Error fetching news item', error: err.message }, { status: 500 });
     }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     await dbConnect();
     const authCheck = await getUserIdAndRoleFromRequest(req);
 
@@ -55,7 +55,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 
     try {
-        const { error: idValidationError } = idSchema.validate(params.id);
+        const { error: idValidationError } = idSchema.validate((await params).id);
         if (idValidationError) {
             return NextResponse.json({ message: 'Validation Error for ID', errors: [idValidationError.details[0].message] }, { status: 400 });
         }
@@ -75,7 +75,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         }
 
         const updatedNewsItem = await News.findByIdAndUpdate(
-            params.id,
+            (await params).id,
             {
                 ...body,
                 author: authCheck.userName, // Original logic: req.user.name for author on update
@@ -90,14 +90,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         return NextResponse.json(updatedNewsItem);
 
     } catch (err: any) {
-        console.error(`Error updating news item ${params.id}:`, err);
+        console.error(`Error updating news item ${(await params).id}:`, err);
         if (err.name === 'CastError') return NextResponse.json({ message: 'Invalid news ID format' }, { status: 400 });
         if (err.code === 11000) return NextResponse.json({ message: 'Duplicate key error (e.g. URL already exists)' }, { status: 400 });
         return NextResponse.json({ message: 'Error updating news item', error: err.message }, { status: 500 });
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     await dbConnect();
     const authCheck = await getUserIdAndRoleFromRequest(req);
 
@@ -106,12 +106,12 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     }
 
     try {
-        const { error: idValidationError } = idSchema.validate(params.id);
+        const { error: idValidationError } = idSchema.validate((await params).id);
         if (idValidationError) {
             return NextResponse.json({ message: 'Validation Error for ID', errors: [idValidationError.details[0].message] }, { status: 400 });
         }
 
-        const deletedNews = await News.findByIdAndDelete(params.id);
+        const deletedNews = await News.findByIdAndDelete((await params).id);
         if (!deletedNews) {
             return NextResponse.json({ message: 'News item not found for deletion' }, { status: 404 });
         }
@@ -121,7 +121,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         return NextResponse.json({ message: 'News item deleted successfully' });
 
     } catch (err: any) {
-        console.error(`Error deleting news item ${params.id}:`, err);
+        console.error(`Error deleting news item ${(await params).id}:`, err);
         if (err.name === 'CastError') return NextResponse.json({ message: 'Invalid news ID format' }, { status: 400 });
         return NextResponse.json({ message: 'Error deleting news item', error: err.message }, { status: 500 });
     }

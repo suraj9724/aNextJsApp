@@ -1,10 +1,14 @@
 {
   "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js",
+  "/404": "pages/404.html",
+  "/login": "pages/login.html",
+  "/": "pages/index.html",
+  "/news": "pages/news.html",
+  "/rssfeed": "pages/rssfeed.html",
+  "/_error": "pages/_error.js",
+  "/signup": "pages/signup.html",
+  "/unauthorized": "pages/unauthorized.html",
   "/dashboard": "pages/dashboard.js",
-  "/login": "pages/login.js",
-  "/news": "pages/news.js",
-  "/rssfeed": "pages/rssfeed.js",
-  "/signup": "pages/signup.js",
-  "/users": "pages/users.js"
+  "/users": "pages/users.js",
+  "/_document": "pages/_document.js"
 }

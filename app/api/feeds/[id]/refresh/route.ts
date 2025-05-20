@@ -1,14 +1,19 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../../lib/mongodb';
 import RSSFeed from '../../../../../models/rss.model';
 import News from '../../../../../models/news.model';
 import { idSchema } from '../../../../../validations/rss.validation';
 import Parser from 'rss-parser';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../auth/auth.config';
 
 // Placeholder for authentication and authorization logic
 const checkAuthAndAdmin = async (req: Request): Promise<{ authorized: boolean; error?: NextResponse }> => {
-    console.warn('Auth bypass: Placeholder for auth and admin check in /api/feeds/[id]/refresh');
-    return { authorized: true }; // Simulate authorized admin
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return { authorized: false, error: NextResponse.json({ message: 'Unauthorized' }, { status: 401 }) };
+    }
+    return { authorized: true };
 };
 
 const parserInstance = new Parser({
@@ -29,14 +34,17 @@ const cleanContent = (html: string | undefined | null): string => {
         .trim();
 };
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> } // Treat params as a Promise
+) {
     await dbConnect();
 
-    // const authResult = await checkAuthAndAdmin(req);
-    // if (!authResult.authorized) return authResult.error!;
+    const authResult = await checkAuthAndAdmin(req);
+    if (!authResult.authorized) return authResult.error!;
 
     try {
-        const { error: idValidationError } = idSchema.validate(params.id);
+        const { error: idValidationError } = idSchema.validate((await params).id);
         if (idValidationError) {
             return NextResponse.json({
                 message: 'Validation Error for ID',
@@ -44,7 +52,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
             }, { status: 400 });
         }
 
-        const rssFeed = await RSSFeed.findById(params.id);
+        const rssFeed = await RSSFeed.findById((await params).id);
         if (!rssFeed) {
             return NextResponse.json({ message: 'RSS feed not found' }, { status: 404 });
         }
@@ -53,7 +61,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
         }
 
         // --- BEGIN IMPLEMENTED LOGIC for refreshFeedContent ---
-        console.log(`Attempting to refresh feed: ${rssFeed.rssLink} for ID: ${params.id}`);
+        console.log(`Attempting to refresh feed: ${rssFeed.rssLink} for ID: ${(await params).id}`);
         try {
             const feed = await parserInstance.parseURL(rssFeed.rssLink);
             let itemsProcessed = 0;

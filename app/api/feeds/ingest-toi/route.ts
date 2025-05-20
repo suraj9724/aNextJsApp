@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../auth/[...nextauth]/route"; // Corrected path to authOptions
+import { authOptions } from "../../auth/auth.config"; // Corrected path to authOptions
 import dbConnect from '../../../../lib/mongodb'; // Adjust path to your dbConnect
 import RSSFeed from '../../../../models/rss.model'; // Adjust path
 import News from '../../../../models/news.model';   // Adjust path

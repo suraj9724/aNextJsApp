@@ -1,36 +1,35 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '../../../../lib/mongodb'; // Adjusted path
 import RSSFeed from '../../../../models/rss.model'; // Adjusted path
 import {
     idSchema,
     updateRssFeedSchema
 } from '../../../../validations/rss.validation'; // Adjusted path
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/auth.config';
 
 // Placeholder for authentication and authorization logic
 // In your Express app, these routes were protected by `auth` and `requireAdmin` middleware.
 // You'll need to implement similar checks here based on your Next.js auth solution.
 const checkAuthAndAdmin = async (req: Request): Promise<{ authorized: boolean; userId?: string; error?: NextResponse }> => {
-    // Example: Fetch session, check if user is admin
-    // const session = await getServerSession(authOptions);
-    // if (!session || !session.user) {
-    //   return { authorized: false, error: NextResponse.json({ message: 'Authentication required' }, { status: 401 }) };
-    // }
-    // if (session.user.role !== 'admin') { // Assuming role is part of user object
-    //   return { authorized: false, error: NextResponse.json({ message: 'Forbidden: Admin access required' }, { status: 403 }) };
-    // }
-    // return { authorized: true, userId: session.user.id };
-    console.warn('Auth bypass: Placeholder for auth and admin check in /api/feeds/[id]');
-    return { authorized: true, userId: 'PLACEHOLDER_ADMIN_ID' }; // Simulate authorized admin
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return { authorized: false, error: NextResponse.json({ message: 'Unauthorized' }, { status: 401 }) };
+    }
+    return { authorized: true };
 };
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> } // Treat params as a Promise
+) {
     await dbConnect();
 
-    // const authResult = await checkAuthAndAdmin(req);
-    // if (!authResult.authorized) return authResult.error!;
+    const authResult = await checkAuthAndAdmin(req);
+    if (!authResult.authorized) return authResult.error!;
 
     try {
-        const { error: idValidationError } = idSchema.validate(params.id);
+        const { error: idValidationError } = idSchema.validate((await params).id);
         if (idValidationError) {
             return NextResponse.json({
                 message: 'Validation Error',
@@ -38,7 +37,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
             }, { status: 400 });
         }
 
-        const feed = await RSSFeed.findById(params.id);
+        const feed = await RSSFeed.findById((await params).id);
         if (!feed) {
             return NextResponse.json({ message: 'RSS feed not found' }, { status: 404 });
         }
@@ -59,14 +58,17 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> } // Treat params as a Promise
+) {
     await dbConnect();
 
     // const authResult = await checkAuthAndAdmin(req);
     // if (!authResult.authorized) return authResult.error!;
 
     try {
-        const { error: idValidationError } = idSchema.validate(params.id);
+        const { error: idValidationError } = idSchema.validate((await params).id);
         if (idValidationError) {
             return NextResponse.json({
                 message: 'Validation Error for ID',
@@ -86,7 +88,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         const { Provider, subtype, rssLink, isActive } = body;
 
         const updatedFeed = await RSSFeed.findByIdAndUpdate(
-            params.id,
+            (await params).id,
             { Provider, subtype, rssLink, isActive, lastUpdated: new Date() }, // Ensure lastUpdated is set
             { new: true, runValidators: true }
         );
@@ -116,14 +118,17 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> } // Treat params as a Promise
+) {
     await dbConnect();
 
     // const authResult = await checkAuthAndAdmin(req);
     // if (!authResult.authorized) return authResult.error!;
 
     try {
-        const { error: idValidationError } = idSchema.validate(params.id);
+        const { error: idValidationError } = idSchema.validate((await params).id);
         if (idValidationError) {
             return NextResponse.json({
                 message: 'Validation Error for ID',
@@ -131,7 +136,7 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
             }, { status: 400 });
         }
 
-        const deletedFeed = await RSSFeed.findByIdAndDelete(params.id);
+        const deletedFeed = await RSSFeed.findByIdAndDelete((await params).id);
 
         if (!deletedFeed) {
             return NextResponse.json({ message: 'RSS feed not found' }, { status: 404 });

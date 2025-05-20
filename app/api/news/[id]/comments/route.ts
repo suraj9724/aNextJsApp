@@ -4,7 +4,7 @@ import News from '../../../../../models/news.model';
 import Comment from '../../../../../models/comment.model';
 import { idSchema } from '../../../../../validations/rss.validation'; // For newsId param validation
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../auth/[...nextauth]/route';
+import { authOptions } from '../../../auth/auth.config';
 
 // Placeholder for req.user. This needs to be replaced with your actual auth logic in Next.js
 const getUserIdFromRequest = async (req: NextRequest): Promise<{ userId: string | null; error?: NextResponse }> => {
@@ -13,9 +13,12 @@ const getUserIdFromRequest = async (req: NextRequest): Promise<{ userId: string 
         return { userId: null, error: NextResponse.json({ message: 'Authentication required' }, { status: 401 }) };
     }
     return { userId: session.user.id };
-};
+};  
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> } // Treat params as a Promise
+) {
     await dbConnect();
     const authCheck = await getUserIdFromRequest(req);
 
@@ -23,7 +26,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
         return authCheck.error || NextResponse.json({ message: 'Authentication required to comment' }, { status: 401 });
     }
     const userId = authCheck.userId;
-    const newsId = params.id;
+    const newsId = (await params).id;
 
     try {
         const { error: idValidationError } = idSchema.validate(newsId);
@@ -72,9 +75,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     }
 }
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> } // Treat params as a Promise
+) {
     await dbConnect();
-    const newsId = params.id;
+    const newsId = (await params).id;
 
     try {
         const { error: idValidationError } = idSchema.validate(newsId);

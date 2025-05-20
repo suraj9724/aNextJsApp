@@ -3,7 +3,7 @@ import dbConnect from '../../../../lib/mongodb';
 import User from '../../../../models/user.model';
 import { registerSchema } from '../../../../validations/user.validation'; // Can reuse for basic field validation
 import jwt from 'jsonwebtoken'; // For decoding the token of the requesting admin
-import { authOptions } from '../../auth/[...nextauth]/route';
+import { authOptions } from '../../auth/auth.config';
 import { getServerSession } from 'next-auth';
 
 /**

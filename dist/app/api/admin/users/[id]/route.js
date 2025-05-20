@@ -14,7 +14,7 @@ const user_model_1 = __importDefault(require("../../../../../models/user.model")
 // NextAuth session utility for server-side authentication
 const next_1 = require("next-auth/next");
 // NextAuth configuration options
-const route_1 = require("../../../auth/[...nextauth]/route"); // Adjust path as needed
+const route_1 = require("../../../auth/auth.config"); // Adjust path as needed
 // Zod for schema validation - a TypeScript-first schema validation library
 const zod_1 = require("zod");
 /**
@@ -69,10 +69,10 @@ async function PUT(req, { params }) {
         }
         // Update user in database
         const updatedUser = await user_model_1.default.findByIdAndUpdate(id, { $set: updates }, // MongoDB set operator
-        {
-            new: true, // Return the updated document
-            runValidators: true // Run model validators on update
-        }).select('-password'); // Exclude password field from response
+            {
+                new: true, // Return the updated document
+                runValidators: true // Run model validators on update
+            }).select('-password'); // Exclude password field from response
         if (!updatedUser) {
             return server_1.NextResponse.json({ message: 'User not found' }, { status: 404 });
         }

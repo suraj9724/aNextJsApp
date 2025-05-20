@@ -43,6 +43,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.96",
+    "@types/next-auth": "^3.15.0",
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -93,7 +94,8 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.11",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.0.1"
   }
 }

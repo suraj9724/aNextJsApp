@@ -18,4 +18,4 @@ export async function GET(req: NextRequest) {
         console.error('Error fetching news subtypes:', err);
         return NextResponse.json({ message: 'Error fetching news subtypes', error: err.message }, { status: 500 });
     }
-} 
+}   

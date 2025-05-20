@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '../../../../lib/mongodb';
 import RSSFeed from '../../../../models/rss.model';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../auth/auth.config';
 
 // Placeholder for authentication and authorization logic if needed
 // Original Express route for inactive feeds did not specify auth, but you might want to add it.
 const checkAuth = async (req: Request): Promise<{ authorized: boolean; error?: NextResponse }> => {
-    console.warn('Auth bypass: Placeholder for auth check in /api/feeds/inactive');
+    const session = await getServerSession(authOptions);
+    if (!session) {
+        return { authorized: false, error: NextResponse.json({ message: 'Unauthorized' }, { status: 401 }) };
+    }
     return { authorized: true };
 };
 

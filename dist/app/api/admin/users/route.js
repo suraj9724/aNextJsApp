@@ -8,7 +8,7 @@ const server_1 = require("next/server");
 const mongodb_1 = __importDefault(require("../../../../lib/mongodb"));
 const user_model_1 = __importDefault(require("../../../../models/user.model")); // Assuming your user model is here
 const next_1 = require("next-auth/next");
-const route_1 = require("../../auth/[...nextauth]/route"); // Adjust path as necessary
+const route_1 = require("../../auth/auth.config"); // Adjust path as necessary
 async function GET(req) {
     await (0, mongodb_1.default)();
     const session = await (0, next_1.getServerSession)(route_1.authOptions);

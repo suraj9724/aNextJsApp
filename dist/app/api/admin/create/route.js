@@ -7,7 +7,7 @@ exports.POST = POST;
 const server_1 = require("next/server");
 const user_model_js_1 = __importDefault(require("../../../../models/user.model"));
 const user_validation_js_1 = require("../../../../validations/user.validation"); // Can reuse for basic field validation
-const route_1 = require("../../auth/[...nextauth]/route");
+const route_1 = require("../../auth/auth.config");
 const next_auth_1 = require("next-auth");
 /**
  * Placeholder authentication function for admin routes

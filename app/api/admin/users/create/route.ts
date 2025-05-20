@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import dbConnect from '../../../../../lib/mongodb';
 import User from '../../../../../models/user.model';
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../../auth/[...nextauth]/route"; // Adjust path as per your authOptions location
+import { authOptions } from "../../../auth/auth.config"; // Adjust path as per your authOptions location
 import { z } from 'zod';
 
 // Schema for validating the request body for creating a user
