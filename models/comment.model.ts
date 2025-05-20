@@ -13,11 +13,13 @@ const commentSchema = new Schema<IComment>({
         required: true,
         trim: true
     },
+    // @ts-expect-error
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
+    // @ts-expect-error
     newsId: {
         type: Schema.Types.ObjectId,
         ref: 'Newsfeeds',

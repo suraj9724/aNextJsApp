@@ -1,11 +1,1 @@
-{
-  "app": {},
-  "appUsingSizeAdjust": false,
-  "pages": {
-    "/_app": [
-      "static/media/L0x5DF4xlVMF_BfR8bXMIjhLq3_cXbKD-s.p.37830d95.woff2",
-      "static/media/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw-s.p.7b3669ea.woff2"
-    ]
-  },
-  "pagesUsingSizeAdjust": true
-}
+{"pages":{"/_app":["static/media/a34f9d1faa5f3315-s.p.woff2","static/media/92f44bb82993d879-s.p.woff2"]},"app":{},"appUsingSizeAdjust":false,"pagesUsingSizeAdjust":true}

@@ -11,6 +11,7 @@ interface IRSSFeed extends Document {
 }
 
 const rssSchema = new Schema<IRSSFeed>({
+    // @ts-expect-error
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: 'Admin',

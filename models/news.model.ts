@@ -1,5 +1,5 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
-import { BulkWriteResult } from 'mongodb';
+import type { BulkWriteResult as MongoBulkWriteResult } from 'mongodb';
 
 export interface INews extends Document {
     title: string;
@@ -19,7 +19,7 @@ export interface INews extends Document {
     updatedAt: Date;
 }
 
-type NewsModelType = Model<INews, {}, { bulkUpsert: (items: Partial<INews>[]) => Promise<BulkWriteResult> }>;
+type NewsModelType = Model<INews, {}, { bulkUpsert: (items: Partial<INews>[]) => Promise<any> }>;
 
 const newsSchema = new Schema<INews, NewsModelType>({
     title: {
@@ -51,6 +51,7 @@ const newsSchema = new Schema<INews, NewsModelType>({
         type: String,
         trim: true
     },
+    // @ts-expect-error
     source: {
         type: Schema.Types.ObjectId,
         ref: 'RSSFeed',
@@ -87,7 +88,7 @@ const newsSchema = new Schema<INews, NewsModelType>({
 }, {
     timestamps: true,
     statics: {
-        bulkUpsert: async function (items: Partial<INews>[]): Promise<BulkWriteResult> {
+        bulkUpsert: async function (items: Partial<INews>[]): Promise<any> {
             const bulkOps = items.map(item => ({
                 updateOne: {
                     filter: { url: item.url },

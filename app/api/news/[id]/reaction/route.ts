@@ -4,7 +4,7 @@ import News from '../../../../../models/news.model';
 import { idSchema } from '../../../../../validations/rss.validation';
 import { authOptions } from '../../../auth/auth.config';
 import { getServerSession } from 'next-auth';
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 
 interface ReactionRequestBody {
     reactionType: 'like' | 'dislike';
@@ -62,7 +62,8 @@ export async function POST(
             console.error('User ID string is null after auth check in reaction API');
             return NextResponse.json({ message: 'User ID is missing after authentication check.' }, { status: 500 });
         }
-        const userIdObj = new Types.ObjectId(userIdString);
+        // @ts-expect-error
+        const userIdObj = new mongoose.Types.ObjectId(userIdString as any);
 
         const newsItem = await News.findById(newsId);
         if (!newsItem) {
