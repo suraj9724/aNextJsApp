@@ -1,6 +1,4 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../auth/auth.config"; // Corrected path to authOptions
 import dbConnect from '../../../../lib/mongodb'; // Adjust path to your dbConnect
 import RSSFeed from '../../../../models/rss.model'; // Adjust path
 import News from '../../../../models/news.model';   // Adjust path
@@ -15,7 +13,7 @@ const rssParser = new Parser({
     maxRedirects: 5
 });
 
-// Helper function to clean HTML content (from original controller)
+// Helper function to clean HTML content
 const cleanContent = (html: string | undefined | null): string => {
     if (!html) return '';
 
@@ -23,29 +21,39 @@ const cleanContent = (html: string | undefined | null): string => {
     let cleaned = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
         .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
 
-    // Remove image tags and their attributes
-    cleaned = cleaned.replace(/<img[^>]*>/g, '');
-
-    // Remove links but keep their text content
-    cleaned = cleaned.replace(/<a[^>]*>(.*?)<\/a>/g, '$1');
+    // Remove image tags with their attributes
+    cleaned = cleaned.replace(/<img[^>]+>/g, '');
 
     // Remove all HTML tags but preserve line breaks
     cleaned = cleaned.replace(/<br\s*\/?>/gi, '\n')
         .replace(/<\/p>/gi, '\n\n')
-        .replace(/<[^>]+>/g, ' ');
+        .replace(/<\/div>/gi, '\n')
+        .replace(/<\/h[1-6]>/gi, '\n\n')
+        .replace(/<[^>]+>/g, '');
 
-    // Fix spacing issues
-    cleaned = cleaned.replace(/\s+/g, ' ')
-        .replace(/\n\s*\n\s*\n/g, '\n\n') // Replace multiple consecutive line breaks with just two
-        .trim();
-
-    // Decode HTML entities
+    // Remove any leftover HTML entities
     cleaned = cleaned.replace(/&nbsp;/g, ' ')
         .replace(/&amp;/g, '&')
         .replace(/&lt;/g, '<')
         .replace(/&gt;/g, '>')
         .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'");
+        .replace(/&#39;/g, "'")
+        .replace(/&#x27;/g, "'")
+        .replace(/&#x2F;/g, "/")
+        .replace(/&#32;/g, " ")
+        .replace(/&hellip;/g, "...")
+        .replace(/\xa0/g, ' ');
+
+    // Fix spacing issues
+    cleaned = cleaned.replace(/\s+/g, ' ')
+        .replace(/\n\s*\n\s*\n/g, '\n\n')
+        .trim();
+
+    // Remove any URLs that might be left in the text
+    cleaned = cleaned.replace(/https?:\/\/[^\s]+/g, '');
+
+    // Remove any remaining HTML-like content
+    cleaned = cleaned.replace(/<[^>]*>/g, '');
 
     return cleaned;
 };
@@ -168,8 +176,8 @@ export async function GET(req: NextRequest) {
 
                     const newsData = {
                         title: title,
-                        content: cleanContent(item.content || item.contentSnippet || ''),
-                        contentSnippet: cleanContent(item.contentSnippet || item.content || '').slice(0, 200),
+                        content: cleanContent(item.content || item.description || item['content:encoded'] || item.contentSnippet || ''),
+                        contentSnippet: cleanContent(item.contentSnippet || item.description || item.content || '').slice(0, 200),
                         url: url,
                         publishedAt: parseDate(item.pubDate || new Date().toISOString()),
                         author: item.creator || item.author || 'Times of India',
@@ -178,6 +186,16 @@ export async function GET(req: NextRequest) {
                         provider: 'Times of India',
                     };
 
+                    // Log the content before and after cleaning for debugging
+                    // console.log('Original content:', item.content);
+                    // console.log('Cleaned content:', newsData.content);
+
+                    // Ensure content is properly cleaned before saving
+                    if (!newsData.content || newsData.content.includes('<a href=')) {
+                        // console.warn('Content still contains HTML after cleaning:', newsData.content);
+                        // Try cleaning again with more aggressive approach
+                        newsData.content = cleanContent(newsData.content);
+                    }
 
                     // Upsert news item to prevent duplicates
                     try {
