@@ -4,6 +4,7 @@ import type { BulkWriteResult as MongoBulkWriteResult } from 'mongodb';
 export interface INews extends Document {
     title: string;
     content?: string;
+    contentSnippet?: string;
     url: string;
     publishedAt: Date;
     author?: string;
@@ -28,6 +29,10 @@ const newsSchema = new Schema<INews, NewsModelType>({
         trim: true
     },
     content: {
+        type: String,
+        trim: true
+    },
+    contentSnippet: {
         type: String,
         trim: true
     },

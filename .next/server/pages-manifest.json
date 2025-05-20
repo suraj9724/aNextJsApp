@@ -4,5 +4,6 @@
   "/dashboard": "pages/dashboard.js",
   "/login": "pages/login.js",
   "/news": "pages/news.js",
-  "/rssfeed": "pages/rssfeed.js"
+  "/rssfeed": "pages/rssfeed.js",
+  "/users": "pages/users.js"
 }

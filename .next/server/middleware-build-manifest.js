@@ -52,6 +52,17 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/node_modules_ef7a3e19._.js",
       "static/chunks/pages_rssfeed_5771e187._.js",
       "static/chunks/pages_rssfeed_459933cd._.js"
+    ],
+    "/users": [
+      "static/chunks/[root-of-the-server]__bd5a8b48._.js",
+      "static/chunks/node_modules_next_87827338._.js",
+      "static/chunks/node_modules_react_1cad9b0b._.js",
+      "static/chunks/node_modules_react-dom_cjs_react-dom_development_ab7e073c.js",
+      "static/chunks/node_modules_react-dom_f14d0471._.js",
+      "static/chunks/node_modules_zod_dist_esm_ca6379e1._.js",
+      "static/chunks/node_modules_8f7db80e._.js",
+      "static/chunks/pages_users_5771e187._.js",
+      "static/chunks/pages_users_a6903a53._.js"
     ]
   },
   "devFiles": [],

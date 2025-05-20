@@ -18,10 +18,36 @@ const rssParser = new Parser({
 // Helper function to clean HTML content (from original controller)
 const cleanContent = (html: string | undefined | null): string => {
     if (!html) return '';
-    return html.replace(/<img[^>]*>/g, '')
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/\s+/g, ' ')
+
+    // First remove all script and style tags and their contents
+    let cleaned = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '');
+
+    // Remove image tags and their attributes
+    cleaned = cleaned.replace(/<img[^>]*>/g, '');
+
+    // Remove links but keep their text content
+    cleaned = cleaned.replace(/<a[^>]*>(.*?)<\/a>/g, '$1');
+
+    // Remove all HTML tags but preserve line breaks
+    cleaned = cleaned.replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/p>/gi, '\n\n')
+        .replace(/<[^>]+>/g, ' ');
+
+    // Fix spacing issues
+    cleaned = cleaned.replace(/\s+/g, ' ')
+        .replace(/\n\s*\n\s*\n/g, '\n\n') // Replace multiple consecutive line breaks with just two
         .trim();
+
+    // Decode HTML entities
+    cleaned = cleaned.replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+
+    return cleaned;
 };
 
 // Helper function to extract feed URLs from HTML (adapted from original controller)
@@ -142,14 +168,14 @@ export async function GET(req: NextRequest) {
 
                     const newsData = {
                         title: title,
-                        description: item.contentSnippet || item.content,
+                        content: cleanContent(item.content || item.contentSnippet || ''),
+                        contentSnippet: cleanContent(item.contentSnippet || item.content || '').slice(0, 200),
                         url: url,
                         publishedAt: parseDate(item.pubDate || new Date().toISOString()),
-                        author: item.creator || item.author || 'Times of India', // Prefer item.creator, then item.author
-                        source: rssFeed._id, // Link to the RSSFeed document
-                        subtype: feedInfo.subtype || "general", // Inherit subtype from parent feed
-                        provider: 'Times of India', // Explicitly set provider
-                        // categories: item.categories || [] // Assuming categories can be an array of strings
+                        author: item.creator || item.author || 'Times of India',
+                        source: rssFeed._id,
+                        subtype: feedInfo.subtype || "general",
+                        provider: 'Times of India',
                     };
 
 
