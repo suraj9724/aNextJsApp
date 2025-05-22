@@ -430,14 +430,14 @@ const news = () => {
 
       <main className="md:pl-64 pt-16">
         <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                <div>
-                  <h1 className="text-2xl font-bold">News</h1>
-                  <p className="text-muted-foreground">
-                    Browse the latest articles.
-                  </p>
-                </div>
-                {/* Subtype Filter Dropdown */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold">News</h1>
+            <p className="text-muted-foreground">
+              Browse the latest articles.
+            </p>
+          </div>
+          <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 ">
+            {/* Subtype Filter Dropdown */}
                 <div className="w-full md:w-auto md:min-w-[200px]">
                   <Select
                     value={selectedSubtype}
